@@ -1,3 +1,3 @@
 mod matrix;
 mod vector;
-pub use vector::{Real, Vec2D, Vec3D, Vec4D};
+pub use vector::{Real, Vec2D, Vec3D, Vec4D, Vector};

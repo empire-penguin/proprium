@@ -95,6 +95,24 @@ impl Mul<Vec2D> for Mat2x2 {
     }
 }
 
+impl Mul<Real> for Mat2x2 {
+    type Output = Self;
+
+    fn mul(self, rhs: Real) -> Self::Output {
+        Self {
+            data: [self.data[0] * rhs, self.data[1] * rhs],
+        }
+    }
+}
+
+impl Mul<Mat2x2> for Real {
+    type Output = Mat2x2;
+
+    fn mul(self, rhs: Mat2x2) -> Self::Output {
+        rhs * self
+    }
+}
+
 impl Index<usize> for Mat2x2 {
     type Output = Vec2D;
 
@@ -312,6 +330,24 @@ impl Mul<Vec3D> for Mat3x3 {
     }
 }
 
+impl Mul<Real> for Mat3x3 {
+    type Output = Self;
+
+    fn mul(self, rhs: Real) -> Self::Output {
+        Self {
+            data: [self.data[0] * rhs, self.data[1] * rhs, self.data[2] * rhs],
+        }
+    }
+}
+
+impl Mul<Mat3x3> for Real {
+    type Output = Mat3x3;
+
+    fn mul(self, rhs: Mat3x3) -> Self::Output {
+        rhs * self
+    }
+}
+
 impl Index<usize> for Mat3x3 {
     type Output = Vec3D;
 
@@ -362,22 +398,25 @@ impl Matrix for Mat3x3 {
             return Err(MatrixError::SingularMatrix);
         }
         let inv_det = 1.0 / det;
-        let c00 = self.data[1].y() * self.data[2].z() - self.data[1].z() * self.data[2].y();
-        let c01 = self.data[0].z() * self.data[2].y() - self.data[0].y() * self.data[2].z();
-        let c02 = self.data[0].y() * self.data[1].z() - self.data[0].z() * self.data[1].y();
-        let c10 = self.data[1].z() * self.data[2].x() - self.data[1].x() * self.data[2].z();
-        let c11 = self.data[0].x() * self.data[2].z() - self.data[0].z() * self.data[2].x();
-        let c12 = self.data[0].z() * self.data[1].x() - self.data[0].x() * self.data[1].z();
-        let c20 = self.data[1].x() * self.data[2].y() - self.data[1].y() * self.data[2].x();
-        let c21 = self.data[0].y() * self.data[2].x() - self.data[0].x() * self.data[2].y();
-        let c22 = self.data[0].x() * self.data[1].y() - self.data[0].y() * self.data[1].x();
-        Ok(Self {
+        let a = self.data[0].x();
+        let b = self.data[0].y();
+        let c = self.data[0].z();
+        let d = self.data[1].x();
+        let e = self.data[1].y();
+        let f = self.data[1].z();
+        let g = self.data[2].x();
+        let h = self.data[2].y();
+        let i = self.data[2].z();
+
+        let inv = Self {
             data: [
-                Vec3D::new(c00 * inv_det, c10 * inv_det, c20 * inv_det),
-                Vec3D::new(c01 * inv_det, c11 * inv_det, c21 * inv_det),
-                Vec3D::new(c02 * inv_det, c12 * inv_det, c22 * inv_det),
+                Vec3D::new(e * i - f * h, c * h - b * i, b * f - c * e),
+                Vec3D::new(f * g - d * i, a * i - c * g, c * d - a * f),
+                Vec3D::new(d * h - e * g, b * g - a * h, a * e - b * d),
             ],
-        })
+        };
+
+        Ok(inv * inv_det)
     }
 
     fn get(&self, row: usize, col: usize) -> Result<Real, MatrixError> {

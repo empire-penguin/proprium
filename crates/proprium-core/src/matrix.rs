@@ -834,6 +834,100 @@ impl Matrix for Mat4x4 {
     }
 }
 
+impl Mat4x4 {
+    pub fn new(
+        a: Real,
+        b: Real,
+        c: Real,
+        d: Real,
+        e: Real,
+        f: Real,
+        g: Real,
+        h: Real,
+        i: Real,
+        j: Real,
+        k: Real,
+        l: Real,
+        m: Real,
+        n: Real,
+        o: Real,
+        p: Real,
+    ) -> Self {
+        Self {
+            data: [
+                Vec4D::new(a, b, c, d),
+                Vec4D::new(e, f, g, h),
+                Vec4D::new(i, j, k, l),
+                Vec4D::new(m, n, o, p),
+            ],
+        }
+    }
+
+    pub fn default() -> Self {
+        Self {
+            data: [
+                Vec4D::default(),
+                Vec4D::default(),
+                Vec4D::default(),
+                Vec4D::default(),
+            ],
+        }
+    }
+
+    pub fn identity() -> Self {
+        Self {
+            data: [
+                Vec4D::new(1.0, 0.0, 0.0, 0.0),
+                Vec4D::new(0.0, 1.0, 0.0, 0.0),
+                Vec4D::new(0.0, 0.0, 1.0, 0.0),
+                Vec4D::new(0.0, 0.0, 0.0, 1.0),
+            ],
+        }
+    }
+
+    fn get_row(&self, row: usize) -> Result<Vec4D, MatrixError> {
+        if row < 4 {
+            Ok(self.data[row])
+        } else {
+            Err(MatrixError::RowIndexOutOfBounds)
+        }
+    }
+
+    fn get_col(&self, col: usize) -> Result<Vec4D, MatrixError> {
+        if col < 4 {
+            Ok(Vec4D::new(
+                self.data[0][col],
+                self.data[1][col],
+                self.data[2][col],
+                self.data[3][col],
+            ))
+        } else {
+            Err(MatrixError::ColIndexOutOfBounds)
+        }
+    }
+
+    fn set_row(&mut self, row: usize, values: Vec4D) -> Result<(), MatrixError> {
+        if row < 4 {
+            self.data[row] = values;
+            Ok(())
+        } else {
+            Err(MatrixError::RowIndexOutOfBounds)
+        }
+    }
+
+    fn set_col(&mut self, col: usize, values: Vec4D) -> Result<(), MatrixError> {
+        if col < 4 {
+            self.data[0][col] = values.x();
+            self.data[1][col] = values.y();
+            self.data[2][col] = values.z();
+            self.data[3][col] = values.w();
+            Ok(())
+        } else {
+            Err(MatrixError::ColIndexOutOfBounds)
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -1,0 +1,18 @@
+[package]
+name = "proprium"
+version = "0.1.0"
+edition.workspace = true
+description = """
+Linear algebra library for Rust.
+"""
+
+[workspace.package]
+edition = "2021"
+
+[workspace.dependencies]
+anyhow = "1.0.40"
+proprium = {path = ""}
+proprium-core = { path = "crates/proprium-core" }
+
+[dependencies]
+proprium-core.workspace = true

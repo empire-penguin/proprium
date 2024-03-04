@@ -685,6 +685,32 @@ impl Mul<Mat4x4> for Real {
     }
 }
 
+impl Index<usize> for Mat4x4 {
+    type Output = Vec4D;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        match index {
+            0 => &self.data[0],
+            1 => &self.data[1],
+            2 => &self.data[2],
+            3 => &self.data[3],
+            _ => panic!("Index out of bounds"),
+        }
+    }
+}
+
+impl IndexMut<usize> for Mat4x4 {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        match index {
+            0 => &mut self.data[0],
+            1 => &mut self.data[1],
+            2 => &mut self.data[2],
+            3 => &mut self.data[3],
+            _ => panic!("Index out of bounds"),
+        }
+    }
+}
+
 impl Matrix for Mat4x4 {
     fn determinant(&self) -> Real {
         let a = self.data[0].x();

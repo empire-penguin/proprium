@@ -1,5 +1,6 @@
 //! A module for 2D, 3D, and 4D vectors and their operations.
 
+use core::fmt;
 use std::ops::{Add, Div, Index, IndexMut, Mul, Neg, Sub};
 
 pub type Real = f64;
@@ -20,6 +21,9 @@ pub trait Vector:
 
     /// Normalizes a vector in place.
     fn normalize(&mut self) -> ();
+
+    /// Returns a normalized copy of the vector.
+    fn normalized(&self) -> Self;
 
     /// Calculates the angle between two vectors.
     fn angle(&self, other: &Self) -> Real;
@@ -66,6 +70,12 @@ impl Vec2D {
 
     pub fn set_y(&mut self, y: Real) -> () {
         self.y = y;
+    }
+}
+
+impl fmt::Display for Vec2D {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({}, {})", self.x, self.y)
     }
 }
 
@@ -169,6 +179,14 @@ impl Vector for Vec2D {
         self.y /= mag;
     }
 
+    fn normalized(&self) -> Self {
+        let mag = self.magnitude();
+        Self {
+            x: self.x / mag,
+            y: self.y / mag,
+        }
+    }
+
     fn angle(&self, other: &Self) -> Real {
         (self.dot(other) / (self.magnitude() * other.magnitude())).acos()
     }
@@ -245,6 +263,12 @@ impl Vec3D {
             y: self.z * other.x - self.x * other.z,
             z: self.x * other.y - self.y * other.x,
         }
+    }
+}
+
+impl fmt::Display for Vec3D {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({}, {}, {})", self.x, self.y, self.z)
     }
 }
 
@@ -355,6 +379,15 @@ impl Vector for Vec3D {
         self.z /= mag;
     }
 
+    fn normalized(&self) -> Self {
+        let mag = self.magnitude();
+        Self {
+            x: self.x / mag,
+            y: self.y / mag,
+            z: self.z / mag,
+        }
+    }
+
     fn angle(&self, other: &Self) -> Real {
         (self.dot(other) / (self.magnitude() * other.magnitude())).acos()
     }
@@ -458,6 +491,12 @@ impl Vec4D {
         self.y /= self.w;
         self.z /= self.w;
         self.w = 1.0;
+    }
+}
+
+impl fmt::Display for Vec4D {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({}, {}, {}, {})", self.x, self.y, self.z, self.w)
     }
 }
 
@@ -575,6 +614,16 @@ impl Vector for Vec4D {
         self.y /= mag;
         self.z /= mag;
         self.w /= mag;
+    }
+
+    fn normalized(&self) -> Self {
+        let mag = self.magnitude();
+        Self {
+            x: self.x / mag,
+            y: self.y / mag,
+            z: self.z / mag,
+            w: self.w / mag,
+        }
     }
 
     fn angle(&self, other: &Self) -> Real {

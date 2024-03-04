@@ -1,10 +1,10 @@
 //! A module for 2D, 3D, and 4D vectors and their operations.
 
-use std::ops::{Add, Div, Mul, Neg, Sub};
+use std::ops::{Add, Div, Index, IndexMut, Mul, Neg, Sub};
 
 pub type Real = f64;
 
-trait Vector:
+pub trait Vector:
     Sized
     + Add<Self, Output = Self>
     + Sub<Self, Output = Self>
@@ -41,6 +41,31 @@ pub struct Vec2D {
 impl Vec2D {
     pub fn new(x: Real, y: Real) -> Self {
         Self { x, y }
+    }
+
+    pub fn default() -> Self {
+        Self { x: 0.0, y: 0.0 }
+    }
+
+    pub fn x(&self) -> Real {
+        self.x
+    }
+
+    pub fn y(&self) -> Real {
+        self.y
+    }
+
+    pub fn set(&mut self, x: Real, y: Real) -> () {
+        self.x = x;
+        self.y = y;
+    }
+
+    pub fn set_x(&mut self, x: Real) -> () {
+        self.x = x;
+    }
+
+    pub fn set_y(&mut self, y: Real) -> () {
+        self.y = y;
     }
 }
 
@@ -107,6 +132,28 @@ impl Neg for Vec2D {
     }
 }
 
+impl Index<usize> for Vec2D {
+    type Output = Real;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        match index {
+            0 => &self.x,
+            1 => &self.y,
+            _ => panic!("Index out of bounds"),
+        }
+    }
+}
+
+impl IndexMut<usize> for Vec2D {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        match index {
+            0 => &mut self.x,
+            1 => &mut self.y,
+            _ => panic!("Index out of bounds"),
+        }
+    }
+}
+
 impl Vector for Vec2D {
     fn dot(&self, other: &Self) -> Real {
         self.x * other.x + self.y * other.y
@@ -149,8 +196,46 @@ impl Vec3D {
         Self { x, y, z }
     }
 
+    pub fn default() -> Self {
+        Self {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        }
+    }
+
     pub fn from_vec2d(v: Vec2D, z: Real) -> Self {
         Self { x: v.x, y: v.y, z }
+    }
+
+    pub fn x(&self) -> Real {
+        self.x
+    }
+
+    pub fn y(&self) -> Real {
+        self.y
+    }
+
+    pub fn z(&self) -> Real {
+        self.z
+    }
+
+    pub fn set(&mut self, x: Real, y: Real, z: Real) -> () {
+        self.x = x;
+        self.y = y;
+        self.z = z;
+    }
+
+    pub fn set_x(&mut self, x: Real) -> () {
+        self.x = x;
+    }
+
+    pub fn set_y(&mut self, y: Real) -> () {
+        self.y = y;
+    }
+
+    pub fn set_z(&mut self, z: Real) -> () {
+        self.z = z;
     }
 
     /// Calculates the cross product of two vectors.
@@ -230,6 +315,29 @@ impl Neg for Vec3D {
         }
     }
 }
+impl Index<usize> for Vec3D {
+    type Output = Real;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        match index {
+            0 => &self.x,
+            1 => &self.y,
+            2 => &self.z,
+            _ => panic!("Index out of bounds"),
+        }
+    }
+}
+
+impl IndexMut<usize> for Vec3D {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        match index {
+            0 => &mut self.x,
+            1 => &mut self.y,
+            2 => &mut self.z,
+            _ => panic!("Index out of bounds"),
+        }
+    }
+}
 
 impl Vector for Vec3D {
     fn dot(&self, other: &Self) -> Real {
@@ -275,6 +383,15 @@ impl Vec4D {
         Self { x, y, z, w }
     }
 
+    pub fn default() -> Self {
+        Self {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+            w: 0.0,
+        }
+    }
+
     pub fn from_vec2d(v: &Vec2D, z: Real, w: Real) -> Self {
         Self {
             x: v.x,
@@ -293,7 +410,50 @@ impl Vec4D {
         }
     }
 
+    pub fn x(&self) -> Real {
+        self.x
+    }
+
+    pub fn y(&self) -> Real {
+        self.y
+    }
+
+    pub fn z(&self) -> Real {
+        self.z
+    }
+
+    pub fn w(&self) -> Real {
+        self.w
+    }
+
+    pub fn set(&mut self, x: Real, y: Real, z: Real, w: Real) -> () {
+        self.x = x;
+        self.y = y;
+        self.z = z;
+        self.w = w;
+    }
+
+    pub fn set_x(&mut self, x: Real) -> () {
+        self.x = x;
+    }
+
+    pub fn set_y(&mut self, y: Real) -> () {
+        self.y = y;
+    }
+
+    pub fn set_z(&mut self, z: Real) -> () {
+        self.z = z;
+    }
+
+    pub fn set_w(&mut self, w: Real) -> () {
+        self.w = w;
+    }
+
     pub fn homogenize(&mut self) -> () {
+        if self.w == 0.0 {
+            eprintln!("Cannot homogenize vector with w = 0.0");
+            return;
+        }
         self.x /= self.w;
         self.y /= self.w;
         self.z /= self.w;
@@ -370,6 +530,32 @@ impl Neg for Vec4D {
             y: -self.y,
             z: -self.z,
             w: -self.w,
+        }
+    }
+}
+
+impl Index<usize> for Vec4D {
+    type Output = Real;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        match index {
+            0 => &self.x,
+            1 => &self.y,
+            2 => &self.z,
+            3 => &self.w,
+            _ => panic!("Index out of bounds"),
+        }
+    }
+}
+
+impl IndexMut<usize> for Vec4D {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        match index {
+            0 => &mut self.x,
+            1 => &mut self.y,
+            2 => &mut self.z,
+            3 => &mut self.w,
+            _ => panic!("Index out of bounds"),
         }
     }
 }

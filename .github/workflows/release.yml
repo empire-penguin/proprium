@@ -1,0 +1,27 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: [self-hosted]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build container
+        run: |
+          mkdir .cargo
+          cargo vendor > .cargo/config.toml
+          podman build . -t proprium:${{ github.ref_name }}
+      - name: Verify container integrity
+        run: podman run --rm localhost/proprium:${{ github.ref_name }} /proprium --help
+      - name: Export container image
+        run: podman save > proprium:${{ github.ref_name }}.tar proprium:${{ github.ref_name }}
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: proprium:${{ github.ref_name }}.tar
+          name: ${{ github.ref_name }}
+          generate_release_notes: true

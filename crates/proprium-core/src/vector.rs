@@ -21,6 +21,9 @@ pub trait Vector:
     /// Normalizes a vector in place.
     fn normalize(&mut self) -> ();
 
+    /// Returns a normalized copy of the vector.
+    fn normalized(&self) -> Self;
+
     /// Calculates the angle between two vectors.
     fn angle(&self, other: &Self) -> Real;
 
@@ -167,6 +170,14 @@ impl Vector for Vec2D {
         let mag = self.magnitude();
         self.x /= mag;
         self.y /= mag;
+    }
+
+    fn normalized(&self) -> Self {
+        let mag = self.magnitude();
+        Self {
+            x: self.x / mag,
+            y: self.y / mag,
+        }
     }
 
     fn angle(&self, other: &Self) -> Real {
@@ -353,6 +364,15 @@ impl Vector for Vec3D {
         self.x /= mag;
         self.y /= mag;
         self.z /= mag;
+    }
+
+    fn normalized(&self) -> Self {
+        let mag = self.magnitude();
+        Self {
+            x: self.x / mag,
+            y: self.y / mag,
+            z: self.z / mag,
+        }
     }
 
     fn angle(&self, other: &Self) -> Real {
@@ -575,6 +595,16 @@ impl Vector for Vec4D {
         self.y /= mag;
         self.z /= mag;
         self.w /= mag;
+    }
+
+    fn normalized(&self) -> Self {
+        let mag = self.magnitude();
+        Self {
+            x: self.x / mag,
+            y: self.y / mag,
+            z: self.z / mag,
+            w: self.w / mag,
+        }
     }
 
     fn angle(&self, other: &Self) -> Real {

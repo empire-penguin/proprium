@@ -3,7 +3,7 @@ use std::{
     ops::{Add, Index, IndexMut, Mul, Sub},
 };
 
-use crate::{Real, Vec2D, Vec3D, Vec4D, Vector};
+use crate::{Real, Vec2D, Vec3D, Vec4D};
 
 const MIN_ALLOWED_DET: Real = 1.0e-6;
 
@@ -186,6 +186,7 @@ impl Matrix for Mat2x2 {
     }
 }
 
+#[allow(dead_code)]
 impl Mat2x2 {
     pub fn new(a: Real, b: Real, c: Real, d: Real) -> Self {
         Self {
@@ -441,6 +442,7 @@ impl Matrix for Mat3x3 {
     }
 }
 
+#[allow(dead_code)]
 impl Mat3x3 {
     pub fn new(
         a: Real,
@@ -860,6 +862,7 @@ impl Matrix for Mat4x4 {
     }
 }
 
+#[allow(dead_code)]
 impl Mat4x4 {
     pub fn new(
         a: Real,

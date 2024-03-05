@@ -1,2 +1,2 @@
 # proprium
-A rust library for linear algebra
+> A rust library for linear algebra

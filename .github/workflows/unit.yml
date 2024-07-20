@@ -23,8 +23,5 @@ jobs:
         with:
           toolchain: stable 
 
-      - name: Add Cargo to PATH
-        run: echo "::add-path::$HOME/.cargo/bin"
-
       - name: Run proprium-core unit tests
         run: cargo test -p proprium-core

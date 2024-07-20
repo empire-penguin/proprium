@@ -204,6 +204,10 @@ impl Vector for Vec4D {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
     }
 
+    fn magnitude_sqrd(&self) -> Real {
+        self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w
+    }
+
     fn magnitude(&self) -> Real {
         (self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).sqrt()
     }
@@ -264,6 +268,8 @@ mod tests {
         assert_eq!(a.dot(&b), 40.0);
         assert_eq!(a.magnitude(), (30.0_f64).sqrt());
         assert_eq!(b.magnitude(), 2.0_f64 * (30.0_f64).sqrt());
+        assert_eq!(a.magnitude_sqrd(), 30.0_f64);
+        assert_eq!(b.magnitude_sqrd(), 120.0_f64);
         let mut c = Vec4D::new(1.0, 2.0, 3.0, 4.0);
         c.normalize();
         let mag = (30.0_f64).sqrt();

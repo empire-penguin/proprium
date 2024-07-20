@@ -173,6 +173,10 @@ impl Vector for Vec3D {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
 
+    fn magnitude_sqrd(&self) -> Real {
+        self.x * self.x + self.y * self.y + self.z * self.z
+    }
+
     fn magnitude(&self) -> Real {
         (self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
     }
@@ -232,6 +236,9 @@ mod tests {
         assert_eq!(a.cross(&b), Vec3D::new(24.0, -12.0, 0.0));
         assert_eq!(a.magnitude(), (14.0_f64).sqrt());
         assert_eq!(b.magnitude(), 2.0_f64 * (14.0_f64).sqrt());
+        assert_eq!(a.magnitude_sqrd(), 14.0_f64);
+        assert_eq!(b.magnitude_sqrd(), 56.0_f64);
+
         let mut c = Vec3D::new(1.0, 2.0, 3.0);
         c.normalize();
         let mag = (14.0_f64).sqrt();

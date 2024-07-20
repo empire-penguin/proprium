@@ -14,6 +14,14 @@ jobs:
   core_unit_tests:
     runs-on: [self-hosted]
     steps:
-      - uses: actions/checkout@v3
+
+      - name: Clone Repo
+        uses: actions/checkout@v3
+
+      - name: Install Rust and Cargo (if not already installed)
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable 
+
       - name: Run proprium-core unit tests
         run: cargo test -p proprium-core

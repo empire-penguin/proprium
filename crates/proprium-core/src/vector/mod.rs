@@ -25,6 +25,9 @@ pub trait Vector:
     /// Calculates the dot product of two vectors.
     fn dot(&self, other: &Self) -> Real;
 
+    /// Calculates the magnitude squared of a vector
+    fn magnitude_sqrd(&self) -> Real;
+
     /// Calculates the magnitude of a vector.
     fn magnitude(&self) -> Real;
 

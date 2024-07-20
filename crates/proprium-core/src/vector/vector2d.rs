@@ -136,6 +136,10 @@ impl Vector for Vec2D {
         self.x * other.x + self.y * other.y
     }
 
+    fn magnitude_sqrd(&self) -> Real {
+        self.x * self.x + self.y * self.y
+    }
+
     fn magnitude(&self) -> Real {
         (self.x * self.x + self.y * self.y).sqrt()
     }
@@ -191,6 +195,7 @@ mod tests {
         let b = Vec2D::new(3.0, 4.0);
         assert_eq!(a.dot(&b), 11.0);
         assert_eq!(a.magnitude(), (5.0_f64).sqrt());
+        assert_eq!(a.magnitude_sqrd(), 5.0_f64);
         let mut c = Vec2D::new(3.0, 4.0);
         c.normalize();
         assert_eq!(c, Vec2D::new(3.0 / 5.0, 4.0 / 5.0));
